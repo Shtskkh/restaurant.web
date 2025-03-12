@@ -3,8 +3,6 @@ import AuthorizeView from "../utils/AuthorizeView.jsx";
 
 export default function HomePage() {
     return (
-        <AuthorizeView>
-            <Typography variant="h5">Домашняя страница</Typography>
-        </AuthorizeView>
+        <Typography variant="h5">Домашняя страница</Typography>
     )
 }

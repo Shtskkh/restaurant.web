@@ -1,7 +1,7 @@
-﻿import {Navigate} from "react-router";
-function AuthorizeView({ children }) {
+﻿import {Navigate, Outlet} from "react-router";
+function AuthorizeView() {
     const user = null;
-    return user ? children : <Navigate to="/login" />;
+    return user ? <Outlet /> : <Navigate to="/login" />;
 }
 
 export default AuthorizeView;
