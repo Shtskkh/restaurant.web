@@ -1,11 +1,16 @@
 ﻿import LoginForm from "../components/LoginForm.jsx";
-import {Box} from "@mui/material";
+import {Box, CssBaseline} from "@mui/material";
+import PageTitle from "../utils/PageTitle.jsx";
 
 function LoginPage() {
     return (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-            <LoginForm />
-        </Box>
+        <>
+            <PageTitle title="Вход" />
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <CssBaseline />
+                <LoginForm />
+            </Box>
+        </>
     )
 }
 
