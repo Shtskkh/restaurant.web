@@ -1,13 +1,44 @@
 import {Box, Button, Container, FormControl, Input, InputLabel, Paper, Typography} from "@mui/material";
 import {useNavigate} from "react-router";
+import {useState} from "react";
 
-function LoginForm(props) {
+function LoginForm() {
 
     const navigate = useNavigate();
+    const [login, setLogin] = useState("");
+    const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleLogin= (e) => {
+        setLogin(e.currentTarget.value)
+    }
+
+    const handlePassword = (e) => {
+        setPassword(e.currentTarget.value)
+    }
+
+    async function handleSubmit(e) {
         e.preventDefault();
-        navigate("/home");
+        const data = new FormData();
+        data.append("login", login);
+        data.append("password", password);
+
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+            },
+            body: data,
+        })
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data.value)
+            navigate("/dashboard");
+        }
+
+        if (response.status === 401) {
+            console.log("Пользователь не авторизирован")
+        }
     }
 
     return (
@@ -17,11 +48,11 @@ function LoginForm(props) {
                 <Box component="form" onSubmit={handleSubmit} noValidate autoComplete="off" mt={1}>
                     <FormControl fullWidth margin="normal">
                         <InputLabel htmlFor="login">Логин</InputLabel>
-                        <Input required id="login" name="login" />
+                        <Input required id="login" name="login" onChange={handleLogin} />
                     </FormControl>
                     <FormControl fullWidth margin="normal">
                         <InputLabel htmlFor="password">Пароль</InputLabel>
-                        <Input required id="password" name="password" type="password" />
+                        <Input required id="password" name="password" type="password" onChange={handlePassword} />
                     </FormControl>
                     <Button type="submit" variant="contained" fullWidth sx={{ marginTop: 4}}>Войти</Button>
                 </Box>

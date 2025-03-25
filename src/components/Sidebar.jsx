@@ -1,7 +1,6 @@
 ﻿import {Drawer, List, ListItem, ListItemButton, ListItemText} from "@mui/material";
 import routes from "../utils/Routes.jsx";
 import {useNavigate} from "react-router";
-const pages = ["Сводка", "Заказы", "Блюда", "Сотрудники", "Поставки"]
 
 function Sidebar() {
     const navigate = useNavigate()
@@ -28,6 +27,6 @@ function Sidebar() {
             </List>
         </Drawer>
     );
-};
+}
 
 export default Sidebar;
