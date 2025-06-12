@@ -6,7 +6,7 @@ import type { paths } from "./schema";
 export const queryClient = new QueryClient();
 
 export const fetchClient = createFetchClient<paths>({
-  baseUrl: "https://localhost:7280/",
+  baseUrl: "http://localhost:8080/",
 });
 
 export const $api = createClient(fetchClient);
