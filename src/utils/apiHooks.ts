@@ -24,3 +24,29 @@ export const useStaffById = (id: number) => {
     },
   });
 };
+
+export const useOrders = () => {
+  return $api.useQuery("get", "/api/Orders/GetAll", {
+    refetchInterval: 1000,
+  });
+};
+
+export const useOrderById = (id: number) => {
+  return $api.useQuery("get", "/api/Orders/GetById/{id}", {
+    params: {
+      path: { id: id },
+    },
+  });
+};
+
+export const useDishes = () => {
+  return $api.useQuery("get", "/api/Dishes/GetAll");
+};
+
+export const useDish = (id: number) => {
+  return $api.useQuery("get", "/api/Dishes/GetById/{id}", {
+    params: {
+      path: { id: id },
+    },
+  });
+};

@@ -1,16 +1,19 @@
 ﻿import { Box, CircularProgress } from "@mui/material";
+import PageLayout from "./layouts/PageLayout.tsx";
 
 export const PendingComponent = () => {
   return (
-    <Box
-      sx={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <CircularProgress />
-    </Box>
+    <PageLayout>
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    </PageLayout>
   );
 };

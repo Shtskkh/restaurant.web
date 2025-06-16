@@ -5,7 +5,7 @@ import PageLayout from "../../components/layouts/PageLayout.tsx";
 import { PendingComponent } from "../../components/PendingComponent.tsx";
 import { useStaffById } from "../../utils/apiHooks.ts";
 
-const routeApi = getRouteApi("/_auth/staff_/$id/");
+const routeApi = getRouteApi("/_auth/staff/$id");
 
 function StaffIdPage() {
   const { id } = routeApi.useParams();
