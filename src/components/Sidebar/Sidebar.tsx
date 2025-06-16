@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "@tanstack/react-router";
 import { authStore } from "../../context/auth.ts";
+import { ToggleThemeButton } from "../ToggleThemeButton.tsx";
 import { ListItemLink } from "./ListItemLink.tsx";
 import { tabs } from "./tabs.tsx";
 
@@ -55,6 +56,7 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
       </List>
+      <ToggleThemeButton />
     </Drawer>
   );
 };
