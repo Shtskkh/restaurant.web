@@ -1,6 +1,6 @@
 ﻿import { Typography } from "@mui/material";
 
-const ErrorComponent = (error: any) => {
+export const ErrorComponent = (error: any) => {
   if (error instanceof Error) {
     return (
       <>
@@ -21,5 +21,3 @@ const ErrorComponent = (error: any) => {
     </>
   );
 };
-
-export default ErrorComponent;

@@ -1,6 +1,6 @@
 ﻿import { List, ListItem, ListItemText } from "@mui/material";
 import { getRouteApi } from "@tanstack/react-router";
-import ErrorComponent from "../../components/ErrorComponent.tsx";
+import { ErrorComponent } from "../../components/ErrorComponent.tsx";
 import PageLayout from "../../components/layouts/PageLayout.tsx";
 import { PendingComponent } from "../../components/PendingComponent.tsx";
 import { useStaffById } from "../../utils/apiHooks.ts";
@@ -16,7 +16,7 @@ function StaffIdPage() {
   }
 
   if (!data || error) {
-    return <ErrorComponent />;
+    return <ErrorComponent error={error} />;
   }
 
   return (
