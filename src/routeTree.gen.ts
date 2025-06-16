@@ -14,7 +14,9 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as AuthStaffIndexImport } from './routes/_auth/staff/index'
 import { Route as AuthDashboardIndexImport } from './routes/_auth/dashboard/index'
+import { Route as AuthStaffIdIndexImport } from './routes/_auth/staff_/$id/index'
 
 // Create/Update Routes
 
@@ -35,9 +37,21 @@ const LoginIndexRoute = LoginIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthStaffIndexRoute = AuthStaffIndexImport.update({
+  id: '/staff/',
+  path: '/staff/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AuthDashboardIndexRoute = AuthDashboardIndexImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthStaffIdIndexRoute = AuthStaffIdIndexImport.update({
+  id: '/staff_/$id/',
+  path: '/staff/$id/',
   getParentRoute: () => AuthRoute,
 } as any)
 
@@ -73,6 +87,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardIndexImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/staff/': {
+      id: '/_auth/staff/'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof AuthStaffIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/staff_/$id/': {
+      id: '/_auth/staff_/$id/'
+      path: '/staff/$id'
+      fullPath: '/staff/$id'
+      preLoaderRoute: typeof AuthStaffIdIndexImport
+      parentRoute: typeof AuthImport
+    }
   }
 }
 
@@ -80,10 +108,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
+  AuthStaffIndexRoute: typeof AuthStaffIndexRoute
+  AuthStaffIdIndexRoute: typeof AuthStaffIdIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthDashboardIndexRoute: AuthDashboardIndexRoute,
+  AuthStaffIndexRoute: AuthStaffIndexRoute,
+  AuthStaffIdIndexRoute: AuthStaffIdIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -93,6 +125,8 @@ export interface FileRoutesByFullPath {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginIndexRoute
   '/dashboard': typeof AuthDashboardIndexRoute
+  '/staff': typeof AuthStaffIndexRoute
+  '/staff/$id': typeof AuthStaffIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -100,6 +134,8 @@ export interface FileRoutesByTo {
   '': typeof AuthRouteWithChildren
   '/login': typeof LoginIndexRoute
   '/dashboard': typeof AuthDashboardIndexRoute
+  '/staff': typeof AuthStaffIndexRoute
+  '/staff/$id': typeof AuthStaffIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -108,14 +144,23 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/login/': typeof LoginIndexRoute
   '/_auth/dashboard/': typeof AuthDashboardIndexRoute
+  '/_auth/staff/': typeof AuthStaffIndexRoute
+  '/_auth/staff_/$id/': typeof AuthStaffIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/login' | '/dashboard'
+  fullPaths: '/' | '' | '/login' | '/dashboard' | '/staff' | '/staff/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/dashboard'
-  id: '__root__' | '/' | '/_auth' | '/login/' | '/_auth/dashboard/'
+  to: '/' | '' | '/login' | '/dashboard' | '/staff' | '/staff/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/login/'
+    | '/_auth/dashboard/'
+    | '/_auth/staff/'
+    | '/_auth/staff_/$id/'
   fileRoutesById: FileRoutesById
 }
 
@@ -152,7 +197,9 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/dashboard/"
+        "/_auth/dashboard/",
+        "/_auth/staff/",
+        "/_auth/staff_/$id/"
       ]
     },
     "/login/": {
@@ -160,6 +207,14 @@ export const routeTree = rootRoute
     },
     "/_auth/dashboard/": {
       "filePath": "_auth/dashboard/index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/staff/": {
+      "filePath": "_auth/staff/index.tsx",
+      "parent": "/_auth"
+    },
+    "/_auth/staff_/$id/": {
+      "filePath": "_auth/staff_/$id/index.tsx",
       "parent": "/_auth"
     }
   }
