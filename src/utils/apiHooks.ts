@@ -5,7 +5,7 @@ export const useAuth = (login: string, password: string) => {
     "post",
     "/api/Auth/login",
     {
-      body: { Login: login, Password: password },
+      body: { login: login, password: password },
     },
     {
       enabled: false,
@@ -22,6 +22,12 @@ export const useStaffById = (id: number) => {
     params: {
       path: { id: id },
     },
+  });
+};
+
+export const usePositions = () => {
+  return $api.useQuery("get", "/api/Staff/GetAllPositions", {
+    enabled: false,
   });
 };
 

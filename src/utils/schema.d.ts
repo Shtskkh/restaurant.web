@@ -22,10 +22,9 @@ export interface paths {
             };
             requestBody?: {
                 content: {
-                    "multipart/form-data": {
-                        Login: string;
-                        Password: string;
-                    };
+                    "application/json": components["schemas"]["AuthRequestModel"];
+                    "text/json": components["schemas"]["AuthRequestModel"];
+                    "application/*+json": components["schemas"]["AuthRequestModel"];
                 };
             };
             responses: {
@@ -283,13 +282,6 @@ export interface paths {
                         "application/json": components["schemas"]["StaffModel"][];
                     };
                 };
-                /** @description No Content */
-                204: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content?: never;
-                };
             };
         };
         put?: never;
@@ -355,6 +347,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/Staff/GetAllPositions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Position"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/Supplies/GetAll": {
         parameters: {
             query?: never;
@@ -401,8 +428,27 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AuthRequestModel: {
+            login: string | null;
+            password: string | null;
+        };
         AuthSuccessResponseModel: {
             token: string | null;
+        };
+        Dish: {
+            /** Format: int32 */
+            idDish?: number;
+            title?: string | null;
+            /** Format: double */
+            cost?: number;
+            availability?: boolean;
+            /** Format: double */
+            weightVolume?: number;
+            /** Format: int32 */
+            idUnit?: number;
+            dishesInOrders?: components["schemas"]["DishesInOrder"][] | null;
+            idUnitNavigation?: components["schemas"]["MeasureUnit"];
+            productsInDishes?: components["schemas"]["ProductsInDish"][] | null;
         };
         DishInOrderModel: {
             /** Format: int32 */
@@ -427,6 +473,44 @@ export interface components {
             unit: string | null;
             products?: components["schemas"]["ProductInDishModel"][] | null;
         };
+        DishesInOrder: {
+            /** Format: int32 */
+            idOrder?: number;
+            /** Format: int32 */
+            idDish?: number;
+            /** Format: int32 */
+            count?: number;
+            comment?: string | null;
+            /** Format: int32 */
+            idStatus?: number;
+            idDishNavigation?: components["schemas"]["Dish"];
+            idOrderNavigation?: components["schemas"]["Order"];
+            idStatusNavigation?: components["schemas"]["Status"];
+        };
+        MeasureUnit: {
+            /** Format: int32 */
+            idUnit?: number;
+            title?: string | null;
+            dishes?: components["schemas"]["Dish"][] | null;
+            productsInDishes?: components["schemas"]["ProductsInDish"][] | null;
+            supplies?: components["schemas"]["Supply"][] | null;
+        };
+        Order: {
+            /** Format: int32 */
+            idOrder?: number;
+            /** Format: date-time */
+            date?: string;
+            /** Format: int32 */
+            idTable?: number;
+            /** Format: int32 */
+            idStatus?: number;
+            /** Format: int32 */
+            idEmployee?: number;
+            dishesInOrders?: components["schemas"]["DishesInOrder"][] | null;
+            idEmployeeNavigation?: components["schemas"]["Staff"];
+            idStatusNavigation?: components["schemas"]["Status"];
+            idTableNavigation?: components["schemas"]["Table"];
+        };
         OrderModel: {
             /** Format: int32 */
             idOrder: number;
@@ -438,6 +522,12 @@ export interface components {
             employee: string | null;
             dishesInOrder?: components["schemas"]["DishInOrderModel"][] | null;
         };
+        Position: {
+            /** Format: int32 */
+            idPosition?: number;
+            title?: string | null;
+            staff?: components["schemas"]["Staff"][] | null;
+        };
         ProblemDetails: {
             type?: string | null;
             title?: string | null;
@@ -448,6 +538,13 @@ export interface components {
         } & {
             [key: string]: unknown;
         };
+        Product: {
+            /** Format: int32 */
+            idProduct?: number;
+            title?: string | null;
+            productsInDishes?: components["schemas"]["ProductsInDish"][] | null;
+            supplies?: components["schemas"]["Supply"][] | null;
+        };
         ProductInDishModel: {
             /** Format: int32 */
             idProduct: number;
@@ -455,6 +552,33 @@ export interface components {
             /** Format: double */
             count: number;
             unit: string | null;
+        };
+        ProductsInDish: {
+            /** Format: int32 */
+            idDish?: number;
+            /** Format: int32 */
+            idProduct?: number;
+            /** Format: double */
+            count?: number;
+            /** Format: int32 */
+            idUnit?: number;
+            idDishNavigation?: components["schemas"]["Dish"];
+            idProductNavigation?: components["schemas"]["Product"];
+            idUnitNavigation?: components["schemas"]["MeasureUnit"];
+        };
+        Staff: {
+            /** Format: int32 */
+            idEmployee?: number;
+            /** Format: int32 */
+            idPosition?: number;
+            lastName?: string | null;
+            firstName?: string | null;
+            middleName?: string | null;
+            phoneNumber?: string | null;
+            login?: string | null;
+            password?: string | null;
+            idPositionNavigation?: components["schemas"]["Position"];
+            orders?: components["schemas"]["Order"][] | null;
         };
         StaffModel: {
             /** Format: int32 */
@@ -465,6 +589,38 @@ export interface components {
             middleName?: string | null;
             phoneNumber: string | null;
         };
+        Status: {
+            /** Format: int32 */
+            idStatus?: number;
+            title?: string | null;
+            dishesInOrders?: components["schemas"]["DishesInOrder"][] | null;
+            orders?: components["schemas"]["Order"][] | null;
+        };
+        Supplier: {
+            /** Format: int32 */
+            idSupplier?: number;
+            title?: string | null;
+            inn?: string | null;
+            kpp?: string | null;
+            supplies?: components["schemas"]["Supply"][] | null;
+        };
+        Supply: {
+            /** Format: int32 */
+            idSupplier?: number;
+            /** Format: int32 */
+            idProduct?: number;
+            /** Format: date-time */
+            date?: string;
+            /** Format: double */
+            count?: number;
+            /** Format: double */
+            cost?: number;
+            /** Format: int32 */
+            idUnit?: number;
+            idProductNavigation?: components["schemas"]["Product"];
+            idSupplierNavigation?: components["schemas"]["Supplier"];
+            idUnitNavigation?: components["schemas"]["MeasureUnit"];
+        };
         SupplyModel: {
             product: string | null;
             /** Format: double */
@@ -473,6 +629,13 @@ export interface components {
             date: string;
             unit: string | null;
             supplier: string | null;
+        };
+        Table: {
+            /** Format: int32 */
+            idTable?: number;
+            /** Format: int32 */
+            number?: number;
+            orders?: components["schemas"]["Order"][] | null;
         };
     };
     responses: never;

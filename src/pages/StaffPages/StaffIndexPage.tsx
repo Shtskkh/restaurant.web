@@ -1,4 +1,5 @@
 ﻿import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -9,15 +10,18 @@
 } from "@mui/material";
 import { DataGrid, GridRowParams } from "@mui/x-data-grid";
 import { ErrorComponent, useNavigate } from "@tanstack/react-router";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import PageLayout from "../../components/layouts/PageLayout.tsx";
 import { PendingComponent } from "../../components/PendingComponent.tsx";
-import { useStaff } from "../../utils/apiHooks.ts";
+import { usePositions, useStaff } from "../../utils/apiHooks.ts";
 import { staffColumns } from "../../utils/columns.ts";
+import { testPassword } from "../../utils/regex.ts";
 
 function StaffIndexPage() {
   const { data, error, isLoading } = useStaff();
+  const positions = usePositions();
   const [open, setOpen] = useState(false);
+  const [passwordError, setPasswordError] = useState<boolean>(false);
   const navigate = useNavigate();
 
   if (isLoading) {
@@ -41,6 +45,14 @@ function StaffIndexPage() {
     navigate({ to: "/staff/$id", params: { id } }).then();
   };
 
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!testPassword(e.target.value)) {
+      setPasswordError(true);
+    } else {
+      setPasswordError(false);
+    }
+  };
+
   return (
     <PageLayout title={"Сотрудники"}>
       <Button variant="contained" sx={{ marginBottom: 4 }} onClick={handleOpen}>
@@ -56,6 +68,9 @@ function StaffIndexPage() {
             component: "form",
             onSubmit: (e: FormEvent<HTMLFormElement>) => {
               e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const formJson = Object.fromEntries((formData as any).entries());
+              console.log(formJson);
               handleClose();
             },
           },
@@ -64,7 +79,7 @@ function StaffIndexPage() {
         <DialogTitle align="center">Новый сотрудник</DialogTitle>
         <DialogContent>
           <DialogContentText sx={{ mb: 1 }}>
-            Заполните форму нового сотрудника
+            Заполните форму нового сотрудника:
           </DialogContentText>
           <TextField
             id="lastName"
@@ -89,13 +104,20 @@ function StaffIndexPage() {
             margin="dense"
             fullWidth
           />
-          <TextField
-            id="position"
-            name="position"
-            required
-            label="Должность"
-            margin="dense"
-            fullWidth
+          <Autocomplete
+            freeSolo
+            options={positions.data!.map((option) => option.title)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                id="position"
+                name="position"
+                required
+                label="Должность"
+                margin="dense"
+                fullWidth
+              />
+            )}
           />
           <TextField
             id="phoneNumber"
@@ -116,10 +138,16 @@ function StaffIndexPage() {
           <TextField
             id="password"
             name="password"
+            autoComplete="off"
             required
             label="Пароль"
             margin="dense"
             fullWidth
+            onChange={handlePasswordChange}
+            error={passwordError}
+            helperText={
+              "Пароль должен содержать от 8 символов, спец. символы и цифры."
+            }
           />
           <DialogActions sx={{ mt: 2 }}>
             <Button onClick={handleClose}>Отмена</Button>

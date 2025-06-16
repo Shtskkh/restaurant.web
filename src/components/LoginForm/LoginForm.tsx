@@ -10,6 +10,7 @@
 import { red } from "@mui/material/colors";
 import { FormEvent, useState } from "react";
 import { useAuth } from "../../utils/apiHooks.ts";
+import { testPassword } from "../../utils/regex.ts";
 import { LoginFormProps } from "./types.ts";
 
 function LoginForm({ onSuccess }: LoginFormProps) {
@@ -18,12 +19,11 @@ function LoginForm({ onSuccess }: LoginFormProps) {
   const [helperText, setHelperText] = useState<string>("");
   const [errorValidation, setErrorValidation] = useState<boolean>(false);
   const { error, refetch, isLoading } = useAuth(login, password);
-  const reg = /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!testPassword()) {
+    if (!testPassword(password)) {
       setErrorValidation(true);
       setHelperText(
         "Пароль должен содержать от 8 символов, спец. символы и цифры.",
@@ -37,10 +37,6 @@ function LoginForm({ onSuccess }: LoginFormProps) {
     const { data } = await refetch();
 
     if (data?.token) onSuccess(login, data.token);
-  };
-
-  const testPassword = () => {
-    return reg.test(password);
   };
 
   return (
