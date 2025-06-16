@@ -50,3 +50,7 @@ export const useDish = (id: number) => {
     },
   });
 };
+
+export const useSupplies = () => {
+  return $api.useQuery("get", "/api/Supplies/GetAll");
+};
