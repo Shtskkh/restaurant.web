@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import DashboardIndexPage from "../../../pages/DashboardPages/DashboardIndexPage.tsx";
 
-export const Route = createFileRoute('/_auth/dashboard/')({
-  component: RouteComponent,
-})
-
-function RouteComponent() {
-  return <div>Hello "/_auth/dashboard/"!</div>
-}
+export const Route = createFileRoute("/_auth/dashboard/")({
+  head: () => ({
+    meta: [{ title: "Сводка" }],
+  }),
+  component: DashboardIndexPage,
+});
