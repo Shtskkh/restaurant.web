@@ -15,12 +15,13 @@ import PageLayout from "../../components/layouts/PageLayout.tsx";
 import { PendingComponent } from "../../components/PendingComponent.tsx";
 import { usePositions, useStaff } from "../../utils/apiHooks.ts";
 import { staffColumns } from "../../utils/columns.ts";
-import { testPassword } from "../../utils/regex.ts";
+import { testPassword, testPhoneNumber } from "../../utils/regex.ts";
 
 function StaffIndexPage() {
   const { data, error, isLoading } = useStaff();
   const positions = usePositions();
   const [open, setOpen] = useState(false);
+  const [telephoneError, setTelephoneError] = useState<boolean>(false);
   const [passwordError, setPasswordError] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -43,6 +44,14 @@ function StaffIndexPage() {
   const handleRowDoubleClick = (gridParams: GridRowParams): void => {
     const id: string = gridParams.row.idEmployee;
     navigate({ to: "/staff/$id", params: { id } }).then();
+  };
+
+  const handleTelephoneChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!testPhoneNumber(e.target.value)) {
+      setTelephoneError(true);
+    } else {
+      setTelephoneError(false);
+    }
   };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -125,6 +134,10 @@ function StaffIndexPage() {
             required
             label="Номер телефона"
             margin="dense"
+            type="tel"
+            onChange={handleTelephoneChange}
+            error={telephoneError}
+            helperText="Телефон должен быть в формате +79996661234"
             fullWidth
           />
           <TextField
