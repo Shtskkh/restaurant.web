@@ -13,12 +13,13 @@ import { ErrorComponent, useNavigate } from "@tanstack/react-router";
 import { ChangeEvent, FormEvent, useState } from "react";
 import PageLayout from "../../components/layouts/PageLayout.tsx";
 import { PendingComponent } from "../../components/PendingComponent.tsx";
-import { usePositions, useStaff } from "../../utils/apiHooks.ts";
+import { addStaff, usePositions, useStaff } from "../../utils/apiHooks.ts";
 import { staffColumns } from "../../utils/columns.ts";
 import { testPassword, testPhoneNumber } from "../../utils/regex.ts";
 
 function StaffIndexPage() {
   const { data, error, isLoading } = useStaff();
+  const { mutate } = addStaff();
   const positions = usePositions();
   const [open, setOpen] = useState(false);
   const [telephoneError, setTelephoneError] = useState<boolean>(false);
@@ -80,6 +81,7 @@ function StaffIndexPage() {
               const formData = new FormData(e.currentTarget);
               const formJson = Object.fromEntries((formData as any).entries());
               console.log(formJson);
+              mutate({ body: formData });
               handleClose();
             },
           },

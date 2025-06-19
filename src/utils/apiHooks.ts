@@ -25,6 +25,10 @@ export const useStaffById = (id: number) => {
   });
 };
 
+export const addStaff = () => {
+  return $api.useMutation("post", "/api/Staff/Add");
+};
+
 export const usePositions = () => {
   return $api.useQuery("get", "/api/Staff/GetAllPositions", {
     enabled: false,
